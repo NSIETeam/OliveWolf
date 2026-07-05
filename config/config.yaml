@@ -1,0 +1,81 @@
+# 5i5j 数字人框架统一配置
+
+# ===== 运行环境 =====
+device: "cuda"            # cuda | mps | cpu
+# 注意: LHM 全身3D后端仅支持 cuda
+
+# ===== OpenAI 系 API =====
+openai:
+  api_key: "${OPENAI_API_KEY}"
+  base_url: "https://api.openai.com/v1"
+  # ASR
+  asr_model: "whisper-1"
+  # LLM
+  llm_model: "gpt-4o"
+  llm_temperature: 0.6
+  llm_max_tokens: 800
+
+# ===== TTS (ElevenLabs) =====
+tts:
+  provider: "elevenlabs"
+  api_key: "${ELEVENLABS_API_KEY}"
+  voice_id: "your_voice_id"        # 数字人音色ID
+  model_id: "eleven_multilingual_v2"
+  stability: 0.5
+  similarity_boost: 0.75
+  streaming: true                  # 流式合成，降低首字延迟
+
+# ===== 数字人资产 =====
+assets:
+  # LivePortrait 头肩形象（源图，工装照）
+  liveportrait_source: "assets/avatars/agent_female.jpg"
+  # LHM 全身形象
+  lhm_source: "assets/avatars/agent_full_body.jpg"
+  # 待机动作模板
+  idle_motion: "assets/motions/idle.pkl"
+
+# ===== LivePortrait 渲染后端 =====
+liveportrait:
+  project_root: "../LivePortrait"   # 相对于 i5j_dh
+  flag_use_half_precision: true
+  flag_stitching: true
+  flag_do_crop: true
+  flag_pasteback: true
+  output_fps: 25
+  source_max_dim: 1280
+  # 音频驱动参数
+  audio2lip:
+    frame_rate: 25                  # 与 output_fps 对齐
+    smooth_window: 5                # 嘴部开合度平滑窗口
+    energy_threshold: 0.02          # 静音能量阈值
+    open_scale: 0.6                 # 最大开合度上限(防止嘴张过大)
+
+# ===== LHM 渲染后端（离线） =====
+lhm:
+  project_root: "../LHM"
+  model_name: "LHM-500M-HF"         # 平衡速度与质量
+  render_fps: 30
+  source_size: 336
+  render_size: 288
+
+# ===== 房产知识库 (Phase 3 RAG) =====
+knowledge:
+  enabled: false
+  index_path: "assets/knowledge/index"
+  chunks_path: "assets/knowledge/chunks"
+
+# ===== 场景预设 =====
+scenes:
+  property_explainer:               # ① 线上金牌讲解员
+    renderer: "lhm"                 # 全身3D
+    llm_system_prompt: "你是5i5j金牌房源讲解员，专业介绍户型、采光、周边配套。语言亲和、重点突出。"
+    motion: "assets/motions/walk_and_talk.pkl"
+  consultant:                       # ② 7×24智能置业顾问
+    renderer: "liveportrait"        # 实时头肩
+    llm_system_prompt: "你是5i5j置业顾问，解答首付、贷款、税费、落户政策。复杂问题引导留资转人工。"
+  live_streamer:                    # ③ 新房直播主播
+    renderer: "liveportrait"
+    llm_system_prompt: "你是5i5j新房直播主播，热情介绍楼盘卖点，引导观众留资看房。"
+  process_guide:                    # ④ 签约过户讲解员
+    renderer: "lhm"
+    llm_system_prompt: "你是5i5j签约顾问，逐步讲解网签、资金监管、缴税、过户流程，安抚客户情绪。"

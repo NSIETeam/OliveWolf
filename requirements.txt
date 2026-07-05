@@ -1,0 +1,17 @@
+# 5i5j 数字人框架依赖 (i5j_dh 自身部分)
+# LHM 与 LivePortrait 的依赖请见各自项目 requirements.txt
+
+# 对话引擎
+openai>=1.40.0
+elevenlabs>=1.0.0
+PyYAML>=6.0
+
+# 音频处理
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# 实时入口
+gradio>=4.20.0
+
+# 复用 LivePortrait (其依赖需单独在 LivePortrait 目录安装)
+# numpy, torch, opencv-python, insightface 等见 LivePortrait/requirements.txt

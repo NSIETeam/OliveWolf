@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# 虚拟环境
+venv/
+env/
+.venv/
+
+# 数字人资产（大文件/含隐私，按需自备）
+assets/avatars/*.jpg
+assets/avatars/*.png
+assets/motions/*.pkl
+assets/motions/*.npz
+assets/knowledge/
+
+# 输出与临时文件
+output/
+exps/
+animations/
+*.mp4
+*.wav
+*.mp3
+*.tmp
+
+# IDE / 系统
+.vscode/
+.idea/
+.DS_Store
+
+# 环境变量（切勿提交真实密钥）
+.env
+*.env
