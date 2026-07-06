@@ -12,6 +12,19 @@ services:
     depends_on:
       - redis
 
+  worker:
+    build: .
+    container_name: olivewolf-studio-worker
+    command: ["python", "-m", "app.workers.runner"]
+    env_file:
+      - .env
+    volumes:
+      - ./storage:/app/storage
+      - ./olivewolf_studio.db:/app/olivewolf_studio.db
+    depends_on:
+      - api
+      - redis
+
   redis:
     image: redis:7-alpine
     container_name: olivewolf-redis

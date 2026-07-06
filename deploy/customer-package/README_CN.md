@@ -122,9 +122,11 @@ dist/olivewolf-studio-v0.1.0.tar.gz
 
 - 校验 Avatar 是否已上传形象图
 - 创建训练任务记录
-- 返回任务ID和状态
+- 后台 Worker 自动处理排队任务
+- 生成可部署数字人资产清单 Artifact
+- 返回 `output_uri`
 
-GPU Worker 接入后将继续执行：
+GPU Worker 增强版将继续执行：
 
 - LivePortrait 实时头像预处理缓存
 - LHM 全身3D重建缓存

@@ -19,6 +19,7 @@ This is the control plane customers use instead of installing model dependencies
 - Object storage abstraction
 - Queue abstraction for render workers
 - Docker entrypoint
+- Background worker that processes queued training/render jobs into deployable artifact manifests
 
 The current implementation is a production skeleton: stable API shape, persistence models, and deployment entrypoints. Render workers are intentionally abstracted so deployments can plug in CPU/GPU workers separately.
 
