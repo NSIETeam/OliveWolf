@@ -1,0 +1,29 @@
+services:
+  api:
+    build: .
+    container_name: olivewolf-studio-api
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./storage:/app/storage
+      - ./olivewolf_studio.db:/app/olivewolf_studio.db
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: olivewolf-redis
+    ports:
+      - "6379:6379"
+
+  # Production deployments should use managed Postgres or enable this service.
+  # postgres:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_DB: olivewolf
+  #     POSTGRES_USER: olivewolf
+  #     POSTGRES_PASSWORD: olivewolf
+  #   ports:
+  #     - "5432:5432"
