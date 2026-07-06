@@ -97,6 +97,10 @@ studio/
 - `POST /api/v1/conversations/test`
 - future: `WS /api/v1/conversations/realtime`
 
+### Training Jobs
+- `POST /api/v1/training-jobs`
+- `GET /api/v1/training-jobs/{job_id}`
+
 ### Render Jobs
 - `POST /api/v1/render-jobs`
 - `GET /api/v1/render-jobs/{job_id}`

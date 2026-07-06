@@ -12,3 +12,6 @@ class RenderQueue:
 
     def enqueue_render_job(self, job_id: str) -> QueuedTask:
         return QueuedTask(task_id=job_id)
+
+    def enqueue_training_job(self, job_id: str) -> QueuedTask:
+        return QueuedTask(task_id=job_id)

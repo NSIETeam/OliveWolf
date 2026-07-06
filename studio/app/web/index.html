@@ -29,7 +29,7 @@
 </head>
 <body>
 <header>
-  <div><h1>OliveWolf Studio <span class="pill">Control Plane</span></h1><div class="muted">Create projects, upload avatars, test conversations, and queue render jobs.</div></div>
+  <div><h1>OliveWolf Studio <span class="pill">Control Plane</span></h1><div class="muted">Create projects, upload avatars, train digital humans, test conversations, and queue render jobs.</div></div>
   <button class="secondary" onclick="health()">Health Check</button>
 </header>
 <main>
@@ -70,7 +70,16 @@
     </section>
 
     <section class="card">
-      <h2>4. Knowledge Source</h2>
+      <h2>4. Train / Build Avatar</h2>
+      <label>Training Preset</label><select id="trainingPreset"><option value="portrait_realtime">Portrait Realtime</option><option value="full_body_3d">Full-body 3D</option><option value="voice_and_knowledge">Voice + Knowledge</option></select>
+      <button onclick="createTrainingJob()">Start Training Job</button>
+      <label>Training Job ID</label><input id="trainingJobId" placeholder="auto-filled after create">
+      <button class="secondary" onclick="getTrainingJob()">Refresh Training Job</button>
+      <p class="muted">Customer-facing training builds a deployable avatar asset from uploaded images, voice and knowledge. GPU workers execute the heavy model work.</p>
+    </section>
+
+    <section class="card">
+      <h2>5. Knowledge Source</h2>
       <label>Name</label><input id="knowledgeName" value="Company FAQ">
       <label>Content URI / Note</label><input id="knowledgeUri" value="local://demo/faq.txt">
       <button onclick="createKnowledge()">Create Knowledge Source</button>
@@ -79,13 +88,13 @@
     </section>
 
     <section class="card">
-      <h2>5. Test Conversation</h2>
+      <h2>6. Test Conversation</h2>
       <label>Message</label><textarea id="message">Please introduce what you can do.</textarea>
       <button onclick="testConversation()">Test Reply</button>
     </section>
 
     <section class="card">
-      <h2>6. Queue Render Job</h2>
+      <h2>7. Queue Render Job</h2>
       <label>Input Text</label><textarea id="renderText">Welcome to OliveWolf Studio.</textarea>
       <button onclick="createRenderJob()">Create Render Job</button>
       <label>Render Job ID</label><input id="jobId" placeholder="auto-filled after create">
@@ -109,6 +118,8 @@ async function createTenant(){ try{ const d=await req('/tenants',{method:'POST',
 async function createProject(){ try{ const d=await req('/projects',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,name:$('projectName').value,default_scene:$('projectScene').value})}); $('projectId').value=d.id; }catch(e){show(e)} }
 async function createAvatar(){ try{ const d=await req('/avatars',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,name:$('avatarName').value,voice_id:$('voiceId').value||null})}); $('avatarId').value=d.id; }catch(e){show(e)} }
 async function uploadAvatar(){ try{ const f=$('avatarFile').files[0]; if(!f) return show('Choose a file first.'); const fd=new FormData(); fd.append('file',f); const h=headers(false); const d=await req('/avatars/'+$('avatarId').value+'/upload',{method:'POST',headers:h,body:fd}); show(d); }catch(e){show(e)} }
+async function createTrainingJob(){ try{ const d=await req('/training-jobs',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,avatar_id:$('avatarId').value,training_preset:$('trainingPreset').value})}); $('trainingJobId').value=d.id; }catch(e){show(e)} }
+async function getTrainingJob(){ try{ await req('/training-jobs/'+$('trainingJobId').value,{headers:headers(false)}); }catch(e){show(e)} }
 async function createKnowledge(){ try{ const d=await req('/knowledge-sources',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,name:$('knowledgeName').value,content_uri:$('knowledgeUri').value})}); $('knowledgeId').value=d.id; }catch(e){show(e)} }
 async function ingestKnowledge(){ try{ await req('/knowledge-sources/'+$('knowledgeId').value+'/ingest',{method:'POST',headers:headers(false)}); }catch(e){show(e)} }
 async function testConversation(){ try{ await req('/conversations/test',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,avatar_id:$('avatarId').value,scene:$('projectScene').value,message:$('message').value})}); }catch(e){show(e)} }

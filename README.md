@@ -15,6 +15,23 @@
 - **OliveWolf Studio**：客户工作台/API 控制面，隐藏模型与部署复杂度，见 [`studio/`](studio/)。
 - **OliveWolf Enterprise**：私有化部署、品牌形象定制、知识库集成、监控与权限治理。
 
+## 客户交付
+
+客户服务器一键部署说明见 [`deploy/customer-package/README_CN.md`](deploy/customer-package/README_CN.md)。
+
+交付包生成：
+
+```bash
+bash deploy/customer-package/scripts/package.sh v0.1.0
+```
+
+客户服务器启动：
+
+```bash
+bash deploy/customer-package/scripts/install.sh
+bash deploy/customer-package/scripts/start.sh
+```
+
 ---
 
 ## 一、能做什么

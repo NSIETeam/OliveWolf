@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from app.api.v1 import avatars, conversations, health, knowledge, projects, render_jobs, tenants
+from app.api.v1 import avatars, conversations, health, knowledge, projects, render_jobs, tenants, training_jobs
 from app.core.security import require_api_key
 
 api_router = APIRouter()
@@ -13,5 +13,6 @@ protected_router.include_router(avatars.router, prefix="/avatars", tags=["avatar
 protected_router.include_router(knowledge.router, prefix="/knowledge-sources", tags=["knowledge"])
 protected_router.include_router(conversations.router, prefix="/conversations", tags=["conversations"])
 protected_router.include_router(render_jobs.router, prefix="/render-jobs", tags=["render-jobs"])
+protected_router.include_router(training_jobs.router, prefix="/training-jobs", tags=["training-jobs"])
 
 api_router.include_router(protected_router)

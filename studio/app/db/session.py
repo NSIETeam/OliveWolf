@@ -12,7 +12,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def init_db() -> None:
     # Production deployments should use Alembic migrations.
     # This bootstrap is for local/dev startup only.
-    from app.models import tenant, project, avatar, knowledge, render_job  # noqa: F401
+    from app.models import tenant, project, avatar, knowledge, render_job, training_job  # noqa: F401
     Base.metadata.create_all(bind=engine)
 
 

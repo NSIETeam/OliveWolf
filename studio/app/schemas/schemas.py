@@ -100,6 +100,28 @@ class RenderJobRead(ORMModel):
     created_at: datetime
 
 
+class TrainingJobCreate(BaseModel):
+    tenant_id: str
+    project_id: str
+    avatar_id: str
+    job_type: str = "avatar_build"
+    training_preset: str = "portrait_realtime"
+
+
+class TrainingJobRead(ORMModel):
+    id: str
+    tenant_id: str
+    project_id: str
+    avatar_id: str
+    job_type: str
+    training_preset: str
+    status: str
+    progress: str
+    output_uri: str | None
+    error_message: str | None
+    created_at: datetime
+
+
 class ConversationTestRequest(BaseModel):
     tenant_id: str
     project_id: str

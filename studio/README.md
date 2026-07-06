@@ -14,6 +14,7 @@ This is the control plane customers use instead of installing model dependencies
 - API key protection for non-health endpoints
 - Knowledge source registry and ingestion hook
 - Conversation test API
+- Training job API for customer-facing avatar build tasks
 - Render job API
 - Object storage abstraction
 - Queue abstraction for render workers
