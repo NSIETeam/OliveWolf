@@ -1,7 +1,10 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.api.v1.router import api_router
 from app.core.config import settings
@@ -31,6 +34,14 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(api_router, prefix="/api/v1")
+
+    web_dir = Path(__file__).resolve().parent / "web"
+    app.mount("/studio", StaticFiles(directory=web_dir, html=True), name="studio")
+
+    @app.get("/", include_in_schema=False)
+    def studio_index():
+        return FileResponse(web_dir / "index.html")
+
     return app
 
 

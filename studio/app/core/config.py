@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     database_url: str = Field(default="sqlite:///./olivewolf_studio.db", alias="DATABASE_URL")
     redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")
     object_store_root: str = Field(default="./storage", alias="OBJECT_STORE_ROOT")
+    studio_api_key: str | None = Field(default=None, alias="STUDIO_API_KEY")
+    max_upload_mb: int = Field(default=25, alias="MAX_UPLOAD_MB")
 
     openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
     elevenlabs_api_key: str | None = Field(default=None, alias="ELEVENLABS_API_KEY")

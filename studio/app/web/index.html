@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OliveWolf Studio</title>
+  <style>
+    :root { --black:#0a0a0a; --white:#fff; --gray:#666; --line:#e5e5e5; --bg:#f7f7f7; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; background:var(--bg); color:var(--black); }
+    header { background:var(--white); border-bottom:1px solid var(--line); padding:18px 28px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; }
+    h1 { margin:0; font-size:20px; letter-spacing:-0.02em; }
+    main { max-width:1180px; margin:0 auto; padding:28px; }
+    .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:18px; }
+    .card { background:var(--white); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 10px 30px rgba(0,0,0,.03); }
+    .card.full { grid-column:1/-1; }
+    h2 { margin:0 0 14px; font-size:16px; }
+    label { display:block; font-size:12px; font-weight:700; color:var(--gray); margin:12px 0 6px; }
+    input, textarea, select { width:100%; border:1px solid var(--line); border-radius:10px; padding:11px 12px; font:inherit; background:#fff; }
+    textarea { min-height:92px; resize:vertical; }
+    button { border:0; border-radius:999px; background:var(--black); color:var(--white); padding:11px 18px; font-weight:700; cursor:pointer; margin-top:14px; }
+    button.secondary { background:#fff; color:var(--black); border:1px solid var(--line); }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .muted { color:var(--gray); font-size:12px; line-height:1.6; }
+    pre { background:#111; color:#eee; padding:16px; border-radius:14px; overflow:auto; max-height:260px; font-size:12px; }
+    .pill { display:inline-block; padding:4px 9px; background:#f0f0f0; border-radius:999px; font-size:12px; margin-left:8px; }
+    @media(max-width:800px){ .grid,.row{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<header>
+  <div><h1>OliveWolf Studio <span class="pill">Control Plane</span></h1><div class="muted">Create projects, upload avatars, test conversations, and queue render jobs.</div></div>
+  <button class="secondary" onclick="health()">Health Check</button>
+</header>
+<main>
+  <div class="grid">
+    <section class="card full">
+      <h2>Connection</h2>
+      <div class="row">
+        <div><label>API Base</label><input id="apiBase" value="/api/v1"></div>
+        <div><label>API Key (optional local dev)</label><input id="apiKey" placeholder="STUDIO_API_KEY"></div>
+      </div>
+      <p class="muted">Production deployments should set <code>STUDIO_API_KEY</code>. The console sends it as <code>X-API-Key</code>.</p>
+    </section>
+
+    <section class="card">
+      <h2>1. Create Tenant</h2>
+      <label>Company Name</label><input id="tenantName" value="Demo Company">
+      <label>Slug</label><input id="tenantSlug" value="demo">
+      <button onclick="createTenant()">Create Tenant</button>
+      <label>Tenant ID</label><input id="tenantId" placeholder="auto-filled after create">
+    </section>
+
+    <section class="card">
+      <h2>2. Create Project</h2>
+      <label>Project Name</label><input id="projectName" value="Digital Human Pilot">
+      <label>Default Scene</label><select id="projectScene"><option value="consultant">Consultant</option><option value="live_streamer">Live Streamer</option><option value="property_explainer">Explainer</option><option value="process_guide">Process Guide</option></select>
+      <button onclick="createProject()">Create Project</button>
+      <label>Project ID</label><input id="projectId" placeholder="auto-filled after create">
+    </section>
+
+    <section class="card">
+      <h2>3. Create Avatar</h2>
+      <label>Avatar Name</label><input id="avatarName" value="Olive Host">
+      <label>Voice ID</label><input id="voiceId" placeholder="optional voice id">
+      <button onclick="createAvatar()">Create Avatar</button>
+      <label>Avatar ID</label><input id="avatarId" placeholder="auto-filled after create">
+      <label>Upload Avatar Image</label><input type="file" id="avatarFile" accept="image/png,image/jpeg,image/webp">
+      <button onclick="uploadAvatar()">Upload Image</button>
+    </section>
+
+    <section class="card">
+      <h2>4. Knowledge Source</h2>
+      <label>Name</label><input id="knowledgeName" value="Company FAQ">
+      <label>Content URI / Note</label><input id="knowledgeUri" value="local://demo/faq.txt">
+      <button onclick="createKnowledge()">Create Knowledge Source</button>
+      <label>Knowledge ID</label><input id="knowledgeId" placeholder="auto-filled after create">
+      <button class="secondary" onclick="ingestKnowledge()">Mark Ingested</button>
+    </section>
+
+    <section class="card">
+      <h2>5. Test Conversation</h2>
+      <label>Message</label><textarea id="message">Please introduce what you can do.</textarea>
+      <button onclick="testConversation()">Test Reply</button>
+    </section>
+
+    <section class="card">
+      <h2>6. Queue Render Job</h2>
+      <label>Input Text</label><textarea id="renderText">Welcome to OliveWolf Studio.</textarea>
+      <button onclick="createRenderJob()">Create Render Job</button>
+      <label>Render Job ID</label><input id="jobId" placeholder="auto-filled after create">
+      <button class="secondary" onclick="getRenderJob()">Refresh Job</button>
+    </section>
+
+    <section class="card full">
+      <h2>Output</h2>
+      <pre id="output">Ready.</pre>
+    </section>
+  </div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+function headers(json=true){ const h={}; if(json) h['Content-Type']='application/json'; if($('apiKey').value) h['X-API-Key']=$('apiKey').value; return h; }
+function base(){ return $('apiBase').value.replace(/\/$/,''); }
+function show(x){ $('output').textContent = typeof x === 'string' ? x : JSON.stringify(x,null,2); }
+async function req(path, options={}){ const r=await fetch(base()+path, options); const txt=await r.text(); let data; try{data=JSON.parse(txt)}catch{data=txt} if(!r.ok) throw data; show(data); return data; }
+async function health(){ try{ await req('/health'); }catch(e){ show(e); } }
+async function createTenant(){ try{ const d=await req('/tenants',{method:'POST',headers:headers(),body:JSON.stringify({name:$('tenantName').value,slug:$('tenantSlug').value})}); $('tenantId').value=d.id; }catch(e){show(e)} }
+async function createProject(){ try{ const d=await req('/projects',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,name:$('projectName').value,default_scene:$('projectScene').value})}); $('projectId').value=d.id; }catch(e){show(e)} }
+async function createAvatar(){ try{ const d=await req('/avatars',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,name:$('avatarName').value,voice_id:$('voiceId').value||null})}); $('avatarId').value=d.id; }catch(e){show(e)} }
+async function uploadAvatar(){ try{ const f=$('avatarFile').files[0]; if(!f) return show('Choose a file first.'); const fd=new FormData(); fd.append('file',f); const h=headers(false); const d=await req('/avatars/'+$('avatarId').value+'/upload',{method:'POST',headers:h,body:fd}); show(d); }catch(e){show(e)} }
+async function createKnowledge(){ try{ const d=await req('/knowledge-sources',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,name:$('knowledgeName').value,content_uri:$('knowledgeUri').value})}); $('knowledgeId').value=d.id; }catch(e){show(e)} }
+async function ingestKnowledge(){ try{ await req('/knowledge-sources/'+$('knowledgeId').value+'/ingest',{method:'POST',headers:headers(false)}); }catch(e){show(e)} }
+async function testConversation(){ try{ await req('/conversations/test',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,avatar_id:$('avatarId').value,scene:$('projectScene').value,message:$('message').value})}); }catch(e){show(e)} }
+async function createRenderJob(){ try{ const d=await req('/render-jobs',{method:'POST',headers:headers(),body:JSON.stringify({tenant_id:$('tenantId').value,project_id:$('projectId').value,avatar_id:$('avatarId').value,scene:$('projectScene').value,input_text:$('renderText').value})}); $('jobId').value=d.id; }catch(e){show(e)} }
+async function getRenderJob(){ try{ await req('/render-jobs/'+$('jobId').value,{headers:headers(false)}); }catch(e){show(e)} }
+</script>
+</body>
+</html>
