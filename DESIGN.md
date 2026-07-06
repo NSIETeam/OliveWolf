@@ -1,6 +1,6 @@
-# 5i5j 数字人框架改造设计文档
+# OliveWolf 数字人框架设计文档
 
-> 基于 LHM（阿里通义·全身3D）+ LivePortrait（快手·2D头肩）双渲染后端，构建我爱我家四个业务场景的通用数字人框架，并实现实时问答能力。
+> 基于 LHM（阿里通义·全身3D）+ LivePortrait（快手·2D头肩）双渲染后端，构建通用数字人框架，并实现实时问答能力。
 
 ---
 
@@ -95,7 +95,7 @@
 digital-human/
 ├── LHM/                      # 原始开源（全身3D）
 ├── LivePortrait/             # 原始开源（2D头肩）
-└── i5j_dh/                   # ★ 我爱我家的数字人框架（新增）
+└── olivewolf/                # ★ OliveWolf 数字人框架
     ├── README.md
     ├── config/
     │   └── config.yaml       # 统一配置（API密钥、资产路径、场景参数）
@@ -114,7 +114,7 @@ digital-human/
     ├── assets/
     │   ├── avatars/          # 数字人形象图/视频（工装照）
     │   ├── motions/          # 动作模板（讲解手势、站立待机）
-    │   └── knowledge/        # 房产知识库（政策、税费、贷款）
+    │   └── knowledge/        # 领域知识库（政策、产品、流程、FAQ）
     └── app_realtime.py       # 实时问答入口（Gradio）
 ```
 

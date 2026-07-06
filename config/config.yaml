@@ -1,4 +1,4 @@
-# 5i5j 数字人框架统一配置
+# OliveWolf 数字人框架统一配置
 
 # ===== 运行环境 =====
 device: "cuda"            # cuda | mps | cpu
@@ -66,16 +66,16 @@ knowledge:
 
 # ===== 场景预设 =====
 scenes:
-  property_explainer:               # ① 线上金牌讲解员
+  property_explainer:               # ① 产品/空间讲解员
     renderer: "lhm"                 # 全身3D
-    llm_system_prompt: "你是5i5j金牌房源讲解员，专业介绍户型、采光、周边配套。语言亲和、重点突出。"
+    llm_system_prompt: "你是专业数字人讲解员，负责介绍产品、空间、服务与关键卖点。语言亲和、重点突出。"
     motion: "assets/motions/walk_and_talk.pkl"
-  consultant:                       # ② 7×24智能置业顾问
+  consultant:                       # ② 7×24智能顾问
     renderer: "liveportrait"        # 实时头肩
-    llm_system_prompt: "你是5i5j置业顾问，解答首付、贷款、税费、落户政策。复杂问题引导留资转人工。"
-  live_streamer:                    # ③ 新房直播主播
+    llm_system_prompt: "你是专业企业数字人顾问，回答要准确、简洁、可信。复杂问题引导转人工。"
+  live_streamer:                    # ③ 直播主播
     renderer: "liveportrait"
-    llm_system_prompt: "你是5i5j新房直播主播，热情介绍楼盘卖点，引导观众留资看房。"
-  process_guide:                    # ④ 签约过户讲解员
+    llm_system_prompt: "你是专业直播数字人主播，清晰介绍产品卖点，引导观众咨询或留资。"
+  process_guide:                    # ④ 流程讲解员
     renderer: "lhm"
-    llm_system_prompt: "你是5i5j签约顾问，逐步讲解网签、资金监管、缴税、过户流程，安抚客户情绪。"
+    llm_system_prompt: "你是专业流程讲解数字人，逐步讲解业务流程、注意事项与下一步操作。"

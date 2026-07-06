@@ -50,7 +50,7 @@ cd ../LivePortrait && pip install -r requirements.txt && cd ../i5j_dh
 
 ## 四、准备数字人形象
 
-在 `assets/avatars/` 放置源图（我爱我家工装照）：
+在 `assets/avatars/` 放置数字人源图：
 
 - `agent_female.jpg` — LivePortrait 头肩形象（正面、中性表情、光照均匀）
 - `agent_full_body.jpg` — LHM 全身形象
@@ -126,8 +126,8 @@ backend.render_with_motion(
 ```python
 from conversation.llm import LLM
 
-llm = LLM(system_prompt="你是5i5j置业顾问，解答首付、贷款、税费问题。")
-for sentence in llm.chat_stream_sentences("首套房首付几成？"):
+llm = LLM(system_prompt="你是专业的企业数字人顾问，回答要准确、简洁、可信。")
+for sentence in llm.chat_stream_sentences("请介绍一下你能做什么？"):
     print(sentence)  # 逐句输出，可喂 TTS
 ```
 

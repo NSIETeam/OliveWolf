@@ -24,7 +24,7 @@ class LLM:
         self.model = oc["llm_model"]
         self.temperature = oc.get("llm_temperature", 0.6)
         self.max_tokens = oc.get("llm_max_tokens", 800)
-        self.system_prompt = system_prompt or "你是5i5j的智能置业顾问，专业、亲和、诚信。"
+        self.system_prompt = system_prompt or "你是专业的企业数字人顾问，回答要准确、简洁、可信。"
 
     def chat(self, user_text: str, history: List[Dict] = None) -> str:
         """一次性返回完整回答（非流式）。"""
