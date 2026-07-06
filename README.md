@@ -1,7 +1,9 @@
-# 5i5j 数字人框架 (i5j_dh)
+# OliveWolf — 开源 3D 数字人引擎
 
 > 基于开源项目 **LHM**(阿里通义·全身3D) + **LivePortrait**(快手·2D头肩) 双后端，
-> 为我爱我家构建四个业务场景的通用数字人框架，并实现实时问答。
+> 构建通用数字人框架，支持实时音频驱动问答与企业级部署。
+>
+> OliveWolf 是 [Miraphant](https://github.com/NSIETeam/miraphant) 的开源数字人产品。
 
 完整设计见 [DESIGN.md](DESIGN.md)。
 
